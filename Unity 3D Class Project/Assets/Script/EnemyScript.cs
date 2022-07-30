@@ -14,10 +14,15 @@ public class EnemyScript : MonoBehaviour
     private Rigidbody2D rigidbody;
     public float offset;
     private bool isAttack = false;
+    private gameLogi logi;
+
+    public GameObject gameLogi;
+   
 
     void Start()
     {
-        
+        gameLogi = GameObject.FindGameObjectWithTag("GameController");
+        logi = gameLogi.GetComponent<gameLogi>();
         animator = GetComponent<Animator>();
         rigidbody = GetComponent<Rigidbody2D>();
        
@@ -50,10 +55,16 @@ public class EnemyScript : MonoBehaviour
             moveDirection.y = 1;
         }
         
-        print(Vector2.Distance(distance, new Vector2(0, 0)));
+        
         if(Vector2.Distance(distance, new Vector2 (0,0)) < offset)
         {
             attack();
+        }
+        if (this.enemyHp <=0)
+        {
+            this.enemyHp = 0;
+            animator.SetBool("Dead", true);
+            StartCoroutine(destroyObject());
         }
 
         else
@@ -72,6 +83,11 @@ public class EnemyScript : MonoBehaviour
             attack();
             isAttack = false;
         }
+        if(collision.tag == "Bullet")
+        {
+            this.enemyHp -= 1; 
+        }
+
     }
 
     private void attack()
@@ -84,6 +100,13 @@ public class EnemyScript : MonoBehaviour
         animator.SetBool("Attack", false);
         animator.SetBool("Run", true);
         rigidbody.AddForce(moveDirection * speed * Time.deltaTime, ForceMode2D.Impulse);
+    }
+
+    IEnumerator destroyObject()
+    {
+        yield return new WaitForSeconds(3.0f);
+        logi.score += 5;
+        Destroy(gameObject);
     }
 
 }

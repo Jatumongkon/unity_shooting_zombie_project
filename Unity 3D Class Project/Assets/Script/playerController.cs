@@ -8,6 +8,7 @@ public class playerController : MonoBehaviour
     public float speed = 10.0f;
     public Vector2 moveDirection;
     public GameObject powerUp;
+    public GameObject aim;
     public GameObject gun;
     public GameObject bullet;
     public float fireRate = 2.0f;
@@ -50,7 +51,7 @@ public class playerController : MonoBehaviour
             animator.SetBool("Run", true);
            
         }
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButton(0))
         {
             fire();
         }
@@ -72,8 +73,16 @@ public class playerController : MonoBehaviour
     {
         if (canFire)
         {
-            Instantiate(bullet, gun.transform.position, gun.transform.rotation );
+            Instantiate(bullet, gun.transform.position, aim.transform.rotation );
+            canFire = false;
+            StartCoroutine(reload());
         }
         
+    }
+
+    IEnumerator reload()
+    {
+        yield return new WaitForSeconds(fireRate);
+        canFire = true;
     }
 }
