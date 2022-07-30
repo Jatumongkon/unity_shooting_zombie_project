@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Item
   - Ememy
+  - Wall
+  - Bullet
   layers:
   - Default
   - TransparentFX
