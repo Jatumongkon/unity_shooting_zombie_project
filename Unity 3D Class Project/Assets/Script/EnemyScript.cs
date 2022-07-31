@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class EnemyScript : MonoBehaviour
 {
-    public int enemyHp = 5;
+    public int enemyHp = 3;
     Transform target;
     private Animator animator;
     public Vector2 distance;
@@ -13,8 +13,9 @@ public class EnemyScript : MonoBehaviour
     public float speed = 1;
     private Rigidbody2D rigidbody;
     public float offset;
-    private bool isAttack = false;
+    private bool canAttack = true;
     private gameLogi logi;
+    private playerController player;
 
     public GameObject gameLogi;
    
@@ -29,6 +30,7 @@ public class EnemyScript : MonoBehaviour
         if (target == null)
         {
             target = GameObject.FindGameObjectWithTag("Player").transform;
+            player = GameObject.FindGameObjectWithTag("Player").GetComponent<playerController>();
         }
 
     }
@@ -54,8 +56,8 @@ public class EnemyScript : MonoBehaviour
         {
             moveDirection.y = 1;
         }
-        
-        
+
+        print(offset);
         if(Vector2.Distance(distance, new Vector2 (0,0)) < offset)
         {
             attack();
@@ -67,7 +69,7 @@ public class EnemyScript : MonoBehaviour
             StartCoroutine(destroyObject());
         }
 
-        else
+        if (Vector2.Distance(distance, new Vector2(0, 0)) > offset && this.enemyHp > 0)
         {
             Enemymove();
         }
@@ -78,11 +80,7 @@ public class EnemyScript : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag == "Player")
-        {
-            attack();
-            isAttack = false;
-        }
+
         if(collision.tag == "Bullet")
         {
             this.enemyHp -= 1; 
@@ -92,8 +90,15 @@ public class EnemyScript : MonoBehaviour
 
     private void attack()
     {
-        animator.SetBool("Run", false);
-        animator.SetBool("Attack", true);
+        if (canAttack)
+        {
+            animator.SetBool("Run", false);
+            animator.SetBool("Attack", true);
+            canAttack = false;
+            StartCoroutine(waitForNextAttack());
+            player.hp -= 1;
+        }
+        //player.hp -= 1;
     }
     private void Enemymove()
     {
@@ -104,9 +109,15 @@ public class EnemyScript : MonoBehaviour
 
     IEnumerator destroyObject()
     {
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSeconds(1.0f);
         logi.score += 5;
         Destroy(gameObject);
+    }
+
+    IEnumerator waitForNextAttack()
+    {
+        yield return new WaitForSeconds(1f);
+        canAttack = true; 
     }
 
 }

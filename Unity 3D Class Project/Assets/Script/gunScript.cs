@@ -29,7 +29,7 @@ public class gunScript : MonoBehaviour
        
         Vector2 offset = new Vector2(mousePos.x - screePoint.x, mousePos.y - screePoint.y);
 
-        angle = Mathf.Atan2(offset.y, offset.x) * Mathf.Rad2Deg;
+        angle = Mathf.Atan2(offset.y, offset.x) * Mathf.Rad2Deg -90;
         //transform.rotation = Quaternion.Euler(0f, 0f, angle);
     }
     private void FixedUpdate()

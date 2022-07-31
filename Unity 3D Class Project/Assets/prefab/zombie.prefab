@@ -493,8 +493,8 @@ CapsuleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.22348213}
-  m_Size: {x: 0.5, y: 0.6017628}
+  m_Offset: {x: 0, y: 0.08302212}
+  m_Size: {x: 0.5, y: 1.2147713}
   m_Direction: 0
 --- !u!114 &593574164
 MonoBehaviour:
@@ -512,6 +512,7 @@ MonoBehaviour:
   distance: {x: 0, y: 0}
   speed: 5
   offset: 0.5
+  gameLogi: {fileID: 0}
 --- !u!50 &7123657427853028698
 Rigidbody2D:
   serializedVersion: 4

@@ -9,12 +9,18 @@ public class gameLogi : MonoBehaviour
     public Text Textscore;
     public float score = 0;
     public playerController player;
+    public GameObject zombie;
+
+
+
 
     // Start is called before the first frame update
     void Start()
     {
         score = 0;
         player = player.GetComponent<playerController>();
+
+        
     }
 
     // Update is called once per frame
@@ -23,4 +29,6 @@ public class gameLogi : MonoBehaviour
         Texthp.text = "Hp : " + player.hp;
         Textscore.text = "Score : " + score;
     }
+
+
 }
