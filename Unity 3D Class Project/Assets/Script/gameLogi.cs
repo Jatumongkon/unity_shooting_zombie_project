@@ -14,12 +14,15 @@ public class gameLogi : MonoBehaviour
     public GameObject gameOver;
     private SceneManagerClass sceneManagerClass;
 
+    public GameObject finalScore;
+
     private float timeToload = 0.0f;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        finalScore.SetActive(false);
         score = 0;
         player = player.GetComponent<playerController>();
         sceneManagerClass = gameObject.GetComponent<SceneManagerClass>();
@@ -38,8 +41,12 @@ public class gameLogi : MonoBehaviour
         {
             timeToload += Time.deltaTime;
             Texthp.text = "Dead";
+            Textscore.text = " ";
             gameOver.SetActive(true);
+            finalScore.SetActive(true);
+            finalScore.GetComponent<Text>().text = "Score : " + score;
             gameOver.transform.position = player.transform.position;
+
     
         }
         if (Input.GetKeyDown(KeyCode.Escape))
