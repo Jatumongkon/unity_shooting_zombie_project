@@ -10,7 +10,15 @@ public class SceneManagerClass : MonoBehaviour
     {
         StartCoroutine(LoadSceneName(sceneName));
     }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            print("Quit");
+            Application.Quit();
+        }
 
+    }
     IEnumerator LoadSceneName(string sceneName)
     {
         AsyncOperation async = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);

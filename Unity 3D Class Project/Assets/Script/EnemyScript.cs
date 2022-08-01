@@ -16,6 +16,12 @@ public class EnemyScript : MonoBehaviour
     private bool canAttack = true;
     private gameLogi logi;
     private playerController player;
+    private GameObject playerObject;
+    public GameObject blood;
+    public bool isDead = false;
+    public ParticleSystem shot;
+
+    public AudioSource[] zombieAudio;
 
     public GameObject gameLogi;
    
@@ -30,9 +36,14 @@ public class EnemyScript : MonoBehaviour
         if (target == null)
         {
             target = GameObject.FindGameObjectWithTag("Player").transform;
-            player = GameObject.FindGameObjectWithTag("Player").GetComponent<playerController>();
+            playerObject = GameObject.FindGameObjectWithTag("Player");
+            player = playerObject.GetComponent<playerController>();
         }
-
+        int temp = Random.Range(0, 2);
+        if (temp < 1.0f)
+        {
+            zombieAudio[Random.Range(0, zombieAudio.Length)].Play();
+        }
     }
 
     // Update is called once per frame
@@ -65,6 +76,7 @@ public class EnemyScript : MonoBehaviour
         if (this.enemyHp <=0)
         {
             this.enemyHp = 0;
+            isDead = true;
             animator.SetBool("Dead", true);
             StartCoroutine(destroyObject());
         }
@@ -83,20 +95,23 @@ public class EnemyScript : MonoBehaviour
 
         if(collision.tag == "Bullet")
         {
-            this.enemyHp -= 1; 
+            this.enemyHp -= 1;
+            shot.Play();
         }
 
     }
 
     private void attack()
     {
-        if (canAttack)
+        if (canAttack && !isDead)
         {
             animator.SetBool("Run", false);
             animator.SetBool("Attack", true);
             canAttack = false;
             StartCoroutine(waitForNextAttack());
+            Instantiate(blood, playerObject.transform.position, blood.transform.rotation);
             player.hp -= 1;
+            player.bloodLast();
         }
         //player.hp -= 1;
     }
@@ -109,6 +124,7 @@ public class EnemyScript : MonoBehaviour
 
     IEnumerator destroyObject()
     {
+        
         yield return new WaitForSeconds(1.0f);
         logi.score += 5;
         Destroy(gameObject);
@@ -116,6 +132,7 @@ public class EnemyScript : MonoBehaviour
 
     IEnumerator waitForNextAttack()
     {
+        
         yield return new WaitForSeconds(1f);
         canAttack = true; 
     }

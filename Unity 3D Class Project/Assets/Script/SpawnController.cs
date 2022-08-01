@@ -11,6 +11,8 @@ public class SpawnController : MonoBehaviour
     public gameLogi logi;
     public float timeElapsed = 0.0f;
     public float ItemCycle = 1.0f;
+    public GameObject powerUp;
+    private int powerUpCount;
 
     // Start is called before the first frame update
     void Start()
@@ -22,8 +24,16 @@ public class SpawnController : MonoBehaviour
     void Update()
     {
         timeElapsed += Time.deltaTime;
-        print(timeElapsed);
-        if(timeElapsed > ItemCycle)
+
+        powerUpCount =  GameObject.FindGameObjectsWithTag("Item").Length;
+        if(powerUpCount< 3)
+        {
+            Instantiate(powerUp, new Vector3(Random.Range(-spawnX, spawnX), Random.Range(-spawnY, spawnY), 0.0f), powerUp.transform.rotation);
+        }
+        
+
+
+        if (timeElapsed > ItemCycle)
         {
             Instantiate(zombie, new Vector3(Random.Range(-spawnX, spawnX), Random.Range(-spawnY, spawnY), 0.0f), zombie.transform.rotation);
             timeElapsed = 0;
